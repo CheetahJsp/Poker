@@ -15,7 +15,6 @@
 // @require https://code.jquery.com/jquery-latest.js
 // @include https://forums.d2jsp.org/gold.php*
 // @version 1.25
-// @namespace https://greasyfork.org/users/371129
 // ==/UserScript==
 var TAG_LIST = ["Unknown", "Mediator", "Trusted", "Regular", "Paid Back", "⛔ Blacklist ⛔", "📛 Welcher 📛"],
     COLOR = ["#2b2525", "#326110", "#3f5dce", "#f3ede5", "#f50ea1", "#f7f4f6", "#ef7272"],
