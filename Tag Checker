@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name          Tag Checker/Status Checker
+// @name          Tag Checker
 // @description   Show D2JSP BNP PokerStatus user
 // Credits to fokse for creating this tampermonkey script
 
@@ -14,7 +14,7 @@
 // @include https://forums.d2jsp.org/index.php?
 // @require https://code.jquery.com/jquery-latest.js
 // @include https://forums.d2jsp.org/gold.php*
-// @version 1.25
+// @version 1.26
 // ==/UserScript==
 var TAG_LIST = ["Unknown", "Mediator", "Trusted", "Regular", "Paid Back", "⛔ Blacklist ⛔", "📛 Welcher 📛"],
     COLOR = ["#2b2525", "#326110", "#3f5dce", "#f3ede5", "#f50ea1", "#f7f4f6", "#ef7272"],
@@ -106,8 +106,6 @@ function getStatus(userId) {
             $(`div#pokerstatus_${jsonResult.id}`).each(function() {
                 switch (PAGE_TYPE) {
                     case 'user':
-
-
                         $(this).html(`
                             <table class="ftbt">
                                 <tbody>
@@ -158,7 +156,6 @@ function getStatus(userId) {
                             if (jsonResult.results[4] || jsonResult.results[5]){
                                 $($($(this).append(`<br><div class="view_log></div>`)).append(`<a  href="javascript:void(0);">View tag history</a>`)).click(function(){showSingleLog(this, jsonResult.id)});
                             }
-
                      }
                      break;
                  }
@@ -205,8 +202,8 @@ function parsePage() {
             userid = window.location.href.split("=")[1]
             getStatus(userid);
 
-            $('body > form > table > tbody > tr > td:nth-child(1) > dl:nth-child(1)').append(`<dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
-            $('body > table > tbody > tr > td:nth-child(1) > dl:nth-child(1)').append(` <dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
+            $('body > form > div > div:nth-child(1) > dl:nth-child(1)').append(`<dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
+            $('body > div.upt > div:nth-child(1) > dl:nth-child(1)').after(` <dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
             break;
         case 'guild':
             $('#tLT > tbody > tr:nth-child(1) > th:last-child').after('<th>Poker Status</th>');
@@ -227,6 +224,7 @@ function parsePage() {
                     getStatus(userid);
                 }
             })
+        break;
         case 'topic':
             $('body > form > dl > dd > div.bts.ppc > div.desc.p3.pud').each(function() {
                 $(this).append(`<div id="pokerstatus_${$(this).find('A[href^="pm.php"]').attr('href').split('=')[2]}"><a href="javascript:void(0);">Poker Status:</a> Loading...</div>`);
