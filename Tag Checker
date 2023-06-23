@@ -111,7 +111,7 @@ function getStatus(userId) {
                                 <tbody>
                                     <tr><td align="right"><b>Status:</b></td><td><b><span style="color: ${COLOR[jsonResult.results == false ? 0 : jsonResult.results[1]]};background: ${BACKGROUND[jsonResult.results == false ? 0 : jsonResult.results[1]]};opacity: 0.9;font-weight: bold;padding-left: 5px;padding-right: 5px;padding-top: 1px;padding-bottom: 1px;border-radius: 10px;">${jsonResult.results == false ? 'Unknown' : TAG_LIST[jsonResult.results[1]]}</span></b></td></tr>
                                     ${(jsonResult.results[2] && jsonResult.results[3].indexOf("#") != -1) || (jsonResult.results[3] )  ? `<tr class="bts">`: ''}
-                                    ${jsonResult.results[2] && jsonResult.results[2].indexOf("#") != -1 ? `<td align="right" nowrap="">Discord:</td><td>${jsonResult.results[2]}</td></tr>`: ''}
+                                    ${jsonResult.results[2] && jsonResult.results[2].length > 0 ? `<td align="right" nowrap="">Discord:</td><td>${jsonResult.results[2]}</td></tr>`: ''}
                                     ${jsonResult.results[3]  ? `<tr><td align="right" nowrap="">PokerStars:</td><td>${jsonResult.results[3]}</td></tr>`: ''}
 
                                     ${jsonResult.results[4] || jsonResult.results[5]  ? `<tr class="bts"><td></td><td align="right" nowrap=""><a id="tag_history" href="javascript:void(0);">View tag history</a></td></tr>`: ''}
