@@ -148,7 +148,7 @@ function getStatus(userId) {
 
                         if (jsonResult.results != false) {
                             if (jsonResult.results[2] && jsonResult.results[2].indexOf("#") !== -1) {
-                                $(this).append(`<br>Discord: ${jsonResult.results[2]}`)
+                                $(this).append(`<br>Discord: ${jsonResult.results[2].length > 0}`)
                             }
                             if (jsonResult.results[3]) {
                                 $(this).append(`<br>PokerStars: ${jsonResult.results[3]}`)
