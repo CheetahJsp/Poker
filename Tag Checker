@@ -23,6 +23,7 @@ var TAG_LIST = ["Unknown", "Mediator", "Trusted", "Regular", "Paid Back", "⛔ B
 
 
 
+let USER_CACHE = []
 
 
 var PAGE_TYPE = window.location.href.match(/\/topic\.php/) ? 'topic' :
@@ -60,7 +61,7 @@ function getSticky(){
 function showSingleLog(link, uid){
 
     var offset = jQuery(link).offset();
-    $('#psFieldset').css({top:offset.top,left:offset.left}).show();
+    $('#psFieldset').css({top:offset.top,right:"50px"}).show();
     $('#psFieldset LEGEND SPAN').html("View tag history");
     $('#psFieldset DIV.main').html('<center><img src="https://bnp.tools/load.gif"></center>');
 
@@ -79,7 +80,11 @@ function showSingleLog(link, uid){
 
 };
 
+function setUser(user, status){USER_CACHE[user] = status}
+function getUser(user){return USER_CACHE[user]}
+
 function getStatus(userId) {
+
     $.ajax({
         type: 'GET',
         url: `https://bnp.tools/api/status/${userId}`,
@@ -101,8 +106,6 @@ function getStatus(userId) {
         },
 
         success: function(jsonResult) {
-
-
             $(`div#pokerstatus_${jsonResult.id}`).each(function() {
                 switch (PAGE_TYPE) {
                     case 'user':
@@ -113,7 +116,6 @@ function getStatus(userId) {
                                     ${(jsonResult.results[2] && jsonResult.results[3].indexOf("#") != -1) || (jsonResult.results[3] )  ? `<tr class="bts">`: ''}
                                     ${jsonResult.results[2] && jsonResult.results[2].length > 0 ? `<td align="right" nowrap="">Discord:</td><td>${jsonResult.results[2]}</td></tr>`: ''}
                                     ${jsonResult.results[3] ? `<tr><td align="right" nowrap="">PokerStars:</td><td>${jsonResult.results[3]}</td></tr>`: ''}
-
                                     ${jsonResult.results[4] || jsonResult.results[5] ? `<tr class="bts"><td></td><td align="right" nowrap=""><a id="tag_history" href="javascript:void(0);">View tag history</a></td></tr>`: ''}
                                 </tbody>
                             </table>
@@ -202,8 +204,7 @@ function parsePage() {
             userid = window.location.href.split("=")[1]
             getStatus(userid);
 
-            $('body > form > div > div:nth-child(1) > dl:nth-child(1)').append(`<dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
-            $('body > div.upt > div:nth-child(1) > dl:nth-child(1)').after(` <dl><dt>Bar & Pub Status</dt><dd><div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></dd></dl>`);
+            $('div.piStats').append(`<div class="dFW">Bar & Pub Status<div class="p3 ce"><div id="pokerstatus_${userid}"><i>Loading...</i></div></div></div>`);
             break;
         case 'guild':
             $('#tLT > tbody > tr:nth-child(1) > th:last-child').after('<th>Poker Status</th>');
@@ -247,6 +248,45 @@ function createBox(){
     $('#psFieldset LEGEND IMG').click(function(){$('#psFieldset').hide();});
     $('#psFieldset').hide();
 }
+
+function removeLastColumn(tableSelector) {
+  const table = document.querySelector(tableSelector);
+
+  if (!table) {
+    console.error('Table not found');
+    return;
+  }
+
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td, th');
+    const lastCell = cells[cells.length - 1];
+    if (lastCell) {
+      row.removeChild(lastCell);
+    }
+  });
+}
+
+
+
 createBox();
 parsePage();
 getSticky();
+
+const linkElement = document.querySelector('a[href="javascript:sA()"]');
+if(linkElement != null){
+    linkElement.addEventListener('click', function() {
+  removeLastColumn('table.ftbt.goldLogs.tzc');
+  const tableElement = $('table.ftbt.goldLogs.tzc')[0]; // Get the raw DOM element
+  let observer = new MutationObserver(function(mutations) {
+    clearTimeout(observer.timeout);
+    observer.timeout = setTimeout(function() {
+      console.log('Table content has remained unchanged for 2 seconds');
+      parsePage();
+      observer.disconnect();
+    }, 2000);
+  });
+  observer.observe(tableElement, { childList: true, subtree: true });
+});
+}
