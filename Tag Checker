@@ -61,7 +61,14 @@ function getSticky(){
 function showSingleLog(link, uid){
 
     var offset = jQuery(link).offset();
-    $('#psFieldset').css({top:offset.top,right:"50px"}).show();
+    if(PAGE_TYPE == 'topic' || PAGE_TYPE == 'pm')
+    {
+        $('#psFieldset').css({top:offset.top,right:offset.right}).show();
+    }
+    else
+    {
+        $('#psFieldset').css({top:offset.top,right:"50px"}).show();
+    }
     $('#psFieldset LEGEND SPAN').html("View tag history");
     $('#psFieldset DIV.main').html('<center><img src="https://bnp.tools/load.gif"></center>');
 
@@ -132,7 +139,7 @@ function getStatus(userId) {
                     case 'gold':
                     case 'guild':
                     case 'friend':
-                        $(this).html(`<span style="font-size: 8px;color: ${COLOR[jsonResult.results == false ? 0 : jsonResult.results[1]]};background: ${BACKGROUND[jsonResult.results == false ? 0 : jsonResult.results[1]]};opacity: 0.9;font-weight: bold;padding-left: 5px;padding-right: 5px;padding-top: 1px;padding-bottom: 1px;border-radius: 10px;">${jsonResult.results == false ? 'Unknown' : TAG_LIST[jsonResult.results[1]]}</span>`)
+                        $(this).html(`<span style="color: ${COLOR[jsonResult.results == false ? 0 : jsonResult.results[1]]};background: ${BACKGROUND[jsonResult.results == false ? 0 : jsonResult.results[1]]};opacity: 0.9;font-weight: bold;padding-left: 5px;padding-right: 5px;padding-top: 1px;padding-bottom: 1px;border-radius: 10px;">${jsonResult.results == false ? 'Unknown' : TAG_LIST[jsonResult.results[1]]}</span>`)
 
                         break;
                     case 'userlist':
@@ -145,7 +152,7 @@ function getStatus(userId) {
                     case 'topic':
                     case 'pm':
 
-                         $(this).html(`<a href=\"javascript:void(0);\">Poker Status:</a> <span style="font-size: 8px;color: ${COLOR[jsonResult.results == false ? 0 : jsonResult.results[1]]};background: ${BACKGROUND[jsonResult.results == false ? 0 : jsonResult.results[1]]};opacity: 0.9;font-weight: bold;padding-left: 5px;padding-right: 5px;padding-top: 1px;padding-bottom: 1px;border-radius: 10px;">${jsonResult.results == false ? 'Unknown' : TAG_LIST[jsonResult.results[1]]}</span>`)
+                         $(this).html(`<a href=\"javascript:void(0);\">Poker Status:</a> <span style="color: ${COLOR[jsonResult.results == false ? 0 : jsonResult.results[1]]};background: ${BACKGROUND[jsonResult.results == false ? 0 : jsonResult.results[1]]};opacity: 0.9;font-weight: bold;padding-left: 5px;padding-right: 5px;padding-top: 1px;padding-bottom: 1px;border-radius: 10px;">${jsonResult.results == false ? 'Unknown' : TAG_LIST[jsonResult.results[1]]}</span>`)
 
 
                         if (jsonResult.results != false) {
@@ -175,8 +182,8 @@ function parsePage() {
 
     switch (PAGE_TYPE) {
         case "pm":
-            userid = $('body > form > dl.c > dt > a').attr('href').split('=')[1];
-            $('body > form > dl.c > dd > div.bts.ppc > div.desc.p3.pud').append(`<div id="pokerstatus_${userid}"><a href="javascript:void(0);">Poker Status:</a> Loading...</div>`);
+            userid = $('body > form > dl > dd > div.ppc > div.pU > div > a').attr('href').split('=')[1];
+            $('body > form > dl > dd > div.ppc > div.pU').append(`<div class="desc" id="pokerstatus_${userid}"><a href="javascript:void(0);">Poker Status:</a> Loading...</div>`);
             getStatus(userid);
             break;
         case "friend":
@@ -227,11 +234,12 @@ function parsePage() {
             })
         break;
         case 'topic':
-            $('body > form > dl > dd > div.ppc > div.desc.p3.pud').each(function() {
-                $(this).append(`<div id="pokerstatus_${$(this).find('A[href^="pm.php"]').attr('href').split('=')[2]}"><a href="javascript:void(0);">Poker Status:</a> Loading...</div>`);
+            console.log("hello");
+            $('body > form > dl > dd > div.ppc > div.pU').each(function() {
+                $(this).append(`<div class="desc" id="pokerstatus_${$(this).find('A[href^="pm.php"]').attr('href').split('=')[2]}"><a href="javascript:void(0);">Poker Status:</a> Loading...</div>`);
             });
 
-            $('BODY form DL DT A[href^="user.php"]').each(function() {
+            $('BODY form DL DD div.ppc div.pU div A[href^="user.php"]').each(function() {
                 userid = $(this).attr('href').split('=')[1];
                 if (checked.indexOf(userid) == -1) {
                     checked.push(userid);
